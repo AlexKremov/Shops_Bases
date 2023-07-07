@@ -1,0 +1,9 @@
+CREATE TABLE stores (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    contacts VARCHAR(255) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    shops_name VARCHAR(255) NOT NULL,
+    lat DOUBLE PRECISION NOT NULL,
+    long DOUBLE PRECISION NOT NULL
+);
