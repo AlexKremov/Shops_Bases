@@ -4,8 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-
-	"github.com/tealeg/xlsx"
 )
 
 type Store struct {
@@ -40,51 +38,9 @@ func (s *Store) AddShops(name, contacts, description, shopsName string, lat, lon
 	}
 }
 
-func (s *Store) InsertDataFromXLSX(fileName, shop string) error {
-	xlFile, err := xlsx.OpenFile(fileName)
-	if err != nil {
-		return fmt.Errorf("Ошибка при открытии файла: %v", err)
-	}
-
-	for _, sheet := range xlFile.Sheets {
-		for rowNum, row := range sheet.Rows {
-			cells := row.Cells
-
-			if len(cells) < 4 {
-				log.Printf("ошибка: недостаточно ячеек в строке %d", rowNum+1)
-				continue
-			}
-
-			name := cells[0].String()
-			manufacturer := cells[1].String()
-			quantity, err := cells[2].Float()
-			if err != nil {
-				log.Printf("ошибка при чтении количества: %s", err)
-				continue
-			}
-			price, err := cells[3].Float()
-			if err != nil {
-				log.Printf("ошибка при чтении цены: %s", err)
-				continue
-			}
-
-			product := &Product{
-				Name:         name,
-				Manufacturer: manufacturer,
-				Quantity:     quantity,
-				Price:        price,
-				Shops_name:   shop,
-			}
-
-			_, err = s.db.Exec("INSERT INTO products (name, manufacturer, quantity, price, shops_name) VALUES ($1, $2, $3, $4, $5)", product.Name, product.Manufacturer, product.Quantity, product.Price, product.Shops_name)
-			if err != nil {
-				log.Printf("ошибка при вставке данных в базу данных: %s", err)
-			}
-		}
-	}
-
-	fmt.Println("Данные успешно сохранены в базу данных.")
-	return nil
+func (s *Store) AddShopsSeeds() {
+	s.AddShops("Мастерок", "контакты 1", "описание 1", "masterok", 47.767567, 29.004731)
+	s.AddShops("Фарба", "контакты 2", "описание 2", "farba", 47.766095, 29.006616)
 }
 
 func (s *Store) SearchByName(keyword string) ([]*Product, error) {

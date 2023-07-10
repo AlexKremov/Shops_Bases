@@ -25,22 +25,7 @@ func main() {
 
 	s := store.New(db)
 
-	s.AddShops("Мастерок", "контакты 1", "описание 1", "masterok", 47.767567, 29.004731)
-	s.AddShops("Фарба", "контакты 2", "описание 2", "farba", 47.766095, 29.006616)
-
-	// s.AddProducts()
-	masterok := "masterok.xlsx"
-	farba := "farba.xlsx"
-
-	err = s.InsertDataFromXLSX(masterok, "masterok")
-	if err != nil {
-		log.Fatalf("ошибка при вставке данных из файла: %s", err)
-	}
-
-	err = s.InsertDataFromXLSX(farba, "farba")
-	if err != nil {
-		log.Fatalf("ошибка при вставке данных из файла: %s", err)
-	}
+	s.AddShopsSeeds()
 
 	products, err := s.SearchByName("ремень")
 	if err != nil {
